@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="box">Box</div>
+    <button id="btn">Add</button>
+
+    <script>
+      const box = document.getElementById("box");
+      const btn = document.getElementById("btn");
+
+      const observer = new MutationObserver((mutations) => {
+        // 변경된 걸 출력해주는 콜백
+        console.log("1. (microtask queue) Dom Changed: ", mutations);
+      });
+
+      // 옵저버 등록 (childList: 자식 노드의 변경을 감지)
+      observer.observe(box, { childList: true });
+
+      btn.addEventListener("click", () => {
+        const newEl = document.createElement("p");
+        newEl.textContent = "New element added";
+        setTimeout(() => {
+          console.log("2. Element will be added to DOM");
+        }, 0);
+        box.appendChild(newEl);
+      });
+    </script>
+  </body>
+</html>
