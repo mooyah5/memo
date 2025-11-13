@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Fetch Auth</h1>
+    <input id="username" type="text" placeholder="Username" id="username" />
+    <input id="password" type="password" placeholder="Password" id="password" />
+    <button id="loginBtn">Login</button>
+    <button id="checkSession">Profile</button>
+
+    <script>
+      const loginBtn = document.getElementById("loginBtn");
+      const checkSessionBtn = document.getElementById("checkSession");
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.getElementById("password");
+      loginBtn.addEventListener("click", async () => {
+        try {
+          const res = await fetch("/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: usernameInput.value,
+              password: passwordInput.value,
+            }),
+          });
+
+          const data = await res.json();
+          console.log("Login successful:", data);
+        } catch (err) {
+          console.error("Login failed:", err);
+        }
+      });
+
+      checkSessionBtn.addEventListener("click", async () => {
+        try {
+          const res = await fetch("/profile", {
+            method: "GET",
+            credentials: "same-origin",
+          });
+          const data = await res.json();
+          console.log("Profile data:", data);
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
+        }
+      });
+    </script>
+  </body>
+</html>
