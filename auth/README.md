@@ -20,3 +20,22 @@ fetch("/api/data", {
     - Access-Control-Allow-Methods: GET, POST, ...
     - Access-Control-Allow-Headers: Authorization
 
+2. 로컬 스토리지 속 인증정보 전송
+
+- Headers의 Authorization 속성에 추가.
+- Bearer 문자열로 시작함
+- token 전송 시에도 서버에서 CORS 설정 필요.
+```
+const token = localStorage.getItem("token");
+fetch("/api/profile", {
+    method: "GET",
+    headers: {
+        Authorization: `Bearer ${token}`,
+    }
+});
+```
+
+### 토큰 기반 fetch 요청
+- BE는 express, FE는 React or VanillaJS
+- `/get-token` URL을 fetch로 요청하면 임의의 token을 발급. token은 JSON 형태로 응답.
+- `/profile`을 fetch 요청하면서 서버에서 token 정보를 확인하고, 임의의 JSON 형태의 데이터를 응답.
