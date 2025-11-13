@@ -49,3 +49,54 @@ controller.abort()  // 요청 중단
 - 능력치: stats
 - response.ok가 false면 즉시 에러 출력하고 return;
 - 응답 헤더에 content-type을 콘솔에 출력.
+```
+
+## 병렬 처리하기
+- Promise.all()
+
+```
+// Promise.all() + then
+Promise.all([
+  fetch("https://dummyjson.com/products/1").then(res => res.json()),
+  fetch("https://jsonplaceholder.typicode.com/posts/1").then(res => res.json()),
+])
+  .then(([dummy, place]) => {
+    console.log("dummy", dummy);
+    console.log("place", place);
+  })
+  .catch((err) => {
+    console.error("요청 중 하나라도 실패함: ", err);
+  });
+```
+
+```
+// Promise.all() + async/await
+async function fetchDataParallel() {
+  try {
+    const [dummyRes, placeRes] = await Promise.all([
+      fetch("https://dummyjson.com/products/1"),
+      fetch("https://jsonplaceholder.typicode.com/posts/1"),
+    ])
+    const dummy = await dummyRes.json();
+    const place = await placeRes.json();
+
+    console.log("async dummy", dummy);
+    console.log("async place", place);
+  } catch (err) {
+    console.error("async 요청 중 하나라도 실패함: ", err);
+  }
+}
+fetchDataParallel()
+```
+
+## 기타 Promise 함수들
+- 모두 완료된 결과 확인
+    - Promise.all()
+        모든 req가 성공해야 함. 하나라도 실패 시 전체 reject.
+    - Promise.allSettled()
+        끝날 때까지 기다림. 모두 실패해도 reject되지 않음.
+- 가장 빨리 완료된 결과 확인
+    - Promise.race()
+        가장 빨리 끝난 것만 처리. 실패면 즉시 reject.
+    - Promise.any()
+        가장 빨리 성공한 것만 처리. 모두 실패 시에만 reject됨.
