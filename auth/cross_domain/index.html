@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>다른 서버에서 요청</h1>
+    <button id="checkSession">Profile</button>
+
+    <script>
+      const checkSessionBtn = document.getElementById("checkSession");
+
+      checkSessionBtn.addEventListener("click", async () => {
+        try {
+          const res = await fetch("http://localhost:3000/profile", {
+            method: "GET",
+            credentials: "include",
+          });
+          const data = await res.json();
+          console.log("Profile data:", data);
+        } catch (err) {
+          console.error("Failed to fetch profile:", err);
+        }
+      });
+    </script>
+  </body>
+</html>

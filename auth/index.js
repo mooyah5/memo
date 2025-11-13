@@ -1,6 +1,7 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import { v4 as uuidv4 } from "uuid";
+import cors from "cors";
 
 const app = express();
 
@@ -12,6 +13,10 @@ app.get("/", (req, res) => {
 app.use(express.json());  // 응답을 json으로 파싱
 app.use(cookieParser());  // 쿠키를 파싱
 app.use(express.static("public")); // 정적 파일 제공
+app.use(cors({
+  origin: "http://localhost:8080", // 허용할 출처
+  credentials: true               // 쿠키 허용
+}))
 
 const sessionStore = {};
 
@@ -26,7 +31,9 @@ app.post("/login", (req, res) => {
   sessionStore[sessionId] = user
   res.cookie("sessionId", sessionId, {
     maxAge: 60 * 60 * 1000, // 1 hour
-    httpOnly: true
+    httpOnly: true,
+    sameSite: "none", // cross-site 쿠키 허용
+    secure: true      // HTTPS에서만 전송
   });
   res.json({ message: "Login successful", sessionId, user });
 })
