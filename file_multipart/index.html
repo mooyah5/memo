@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form id="uploadForm">
+      <label>
+        이미지 업로드: <input type="file" name="image" accept="image/*" />
+      </label>
+
+      <br />
+
+      <label> 제목: <input type="text" name="title" /> </label>
+      <br />
+      <button type="submit">업로드</button>
+    </form>
+
+    <script>
+      const uploadForm = document.getElementById("uploadForm");
+
+      uploadForm.addEventListener("submit", async (event) => {
+        e.preventDefault();
+
+        const formData = new FormData(event);
+
+        try {
+          const res = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await res.json();
+          alert("업로드 완료", data.filename);
+        } catch (err) {
+          alert("업로드 실패");
+          console.error(err);
+        }
+      });
+    </script>
+  </body>
+</html>

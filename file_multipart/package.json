@@ -1,0 +1,17 @@
+{
+  "name": "file_multipart",
+  "version": "1.0.0",
+  "description": "- 일반 데이터 => JSON 포맷으로 전송\r - 이미지, PDF, 영상\r     - 텍스트로 바꿀까? =>  Base64 인코딩\r     - 문제: 용량 증가, 네트워크 성능 저하\r     - 원형 그대로 전송할 수 있을까?",
+  "main": "express.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "multer": "^2.0.2"
+  },
+  "type": "module"
+}

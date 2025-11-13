@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="imageInput" type="file" accept="image/*" />
+
+    <script>
+      const imageInput = document.getElementById("imageInput");
+      imageInput.addEventListener("change", async (event) => {
+        event.preventDefault();
+        const file = event.target.files[0];
+        console.log("선택한 파일:", file);
+
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("title", file.name);
+
+        try {
+          const res = await fetch("/upload", {
+            method: "POST",
+            body: formData,
+          });
+          const data = await res.json();
+
+          alert("업로드 완료: " + data.fileName);
+          const newElement = document.createElement("img");
+          const newText = document.createElement("p");
+          newText.textContent = data.fileName;
+          newElement.src = `${data.fileUrl}`;
+          document.body.appendChild(newElement);
+          console.log("서버 응답:", data);
+        } catch (err) {
+          alert("업로드 실패");
+          console.error("업로드 실패:", err);
+        }
+      });
+    </script>
+  </body>
+</html>
