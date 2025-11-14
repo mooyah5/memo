@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo Application</title>
+    <link rel="stylesheet" href="./src/styles/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <h1>My Todo List</h1>
+        <div class="auth-section">
+          <button id="login-btn" class="btn btn-primary">로그인</button>
+          <button
+            id="logout-btn"
+            class="btn btn-secondary"
+            style="display: none"
+          >
+            로그아웃
+          </button>
+          <span id="user-info" class="user-info"></span>
+        </div>
+      </header>
+
+      <main class="main">
+        <!-- 로그인 전 화면 -->
+        <section id="login-section" class="section active">
+          <div class="login-container">
+            <div class="login-box">
+              <h2>Todo List</h2>
+              <p>로그인하여 시작하세요.</p>
+              <button id="simple-login-btn" class="btn btn-primary full-width">
+                로그인
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- 로그인 후 화면 -->
+        <section id="todo-section" class="section" style="display: none">
+          <div class="todo-container">
+            <div class="todo-input-group">
+              <input
+                type="text"
+                id="todo-input"
+                placeholder="새로운 todo를 입력하세요"
+                class="input"
+              />
+              <button id="add-todo-btn" class="btn btn-primary">추가</button>
+            </div>
+
+            <!-- 로딩 상태 -->
+            <div id="loading" class="loading" style="display: none">
+              <p>로딩 중...</p>
+            </div>
+
+            <!-- 에러 메시지 -->
+            <div
+              id="error-message"
+              class="error-message"
+              style="display: none"
+            ></div>
+
+            <!-- Todo 리스트 -->
+            <div id="todo-list" class="todo-list">
+              <div class="empty-state">
+                <p>todo를 불러오는 중입니다...</p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
