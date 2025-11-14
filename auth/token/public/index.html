@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input id="username" type="text" placeholder="username" />
+    <input id="password" type="text" placeholder="password" />
+    <button id="loginBtn">login</button>
+    <button id="profileBtn">profile</button>
+
+    <script>
+      const loginBtn = document.getElementById("loginBtn");
+      const profileBtn = document.getElementById("profileBtn");
+
+      const handleLogin = async () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        const user = { username, password };
+        try {
+          const res = await fetch("/get-token", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user),
+          });
+
+          const data = await res.json();
+          console.log(data);
+          localStorage.setItem("token", data.token);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      const handleProfile = async () => {
+        try {
+          const token = localStorage.getItem("token");
+          if (!token) {
+            console.error("No token found, please login first.");
+            return;
+          }
+          const res = await fetch("/profile", {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
+          const data = await res.json();
+          console.log(data);
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      };
+
+      loginBtn.addEventListener("click", handleLogin);
+      profileBtn.addEventListener("click", handleProfile);
+    </script>
+  </body>
+</html>
