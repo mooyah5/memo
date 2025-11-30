@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지 처리 - 메인 스레드 vs 워커 스레드</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section h2 {
+            margin-top: 0;
+            color: #555;
+        }
+        .main-thread {
+            border-top: 4px solid #ff6b6b;
+        }
+        .worker-thread {
+            border-top: 4px solid #4ecdc4;
+        }
+        canvas {
+            width: 100%;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .controls {
+            margin: 15px 0;
+        }
+        .test-input {
+            margin: 15px 0;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .test-input input {
+            width: 100%;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .test-input input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .status {
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #e8f5e9;
+            border-radius: 4px;
+            min-height: 20px;
+        }
+        .processing {
+            background-color: #fff3cd !important;
+        }
+        .upload-area {
+            margin: 10px 0;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 4px;
+            text-align: center;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #4CAF50;
+            background-color: #f0f0f0;
+        }
+        .info {
+            background-color: #e3f2fd;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+        .info h3 {
+            margin-top: 0;
+        }
+        .image-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 10px 0;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        .image-item {
+            position: relative;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+        .image-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-item.processing {
+            border-color: #ffc107;
+        }
+        .image-item.completed {
+            border-color: #4CAF50;
+        }
+        .remove-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            padding: 0;
+            line-height: 1;
+        }
+        .progress-info {
+            font-size: 12px;
+            color: #666;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖼️ 이미지 처리 성능 비교</h1>
+
+    <div class="info">
+        <h3>실습 목표</h3>
+        <p><strong>여러 이미지를 업로드</strong>하고 일괄 처리 중에 아래 입력창에 타이핑해보세요!</p>
+        <ul>
+            <li><strong>메인 스레드:</strong> 이미지 처리 중 UI가 완전히 멈춤 (입력 불가)</li>
+            <li><strong>워커 스레드:</strong> 이미지 처리 중에도 UI 반응 (입력 가능)</li>
+        </ul>
+    </div>
+
+    <div class="container">
+        <!-- 메인 스레드 -->
+        <div class="section main-thread">
+            <h2>🔴 메인 스레드</h2>
+
+            <div class="upload-area" id="mainUpload">
+                <input type="file" id="mainFileInput" accept="image/*" multiple style="display: none;">
+                <p>이미지 업로드 (여러 개 선택 가능)</p>
+            </div>
+
+            <div class="progress-info" id="mainProgress">이미지 0개</div>
+            <div class="image-list" id="mainImageList"></div>
+
+            <div class="controls">
+                <button id="mainAllFiltersBtn" style="background-color: #ff6b6b; font-weight: bold;">🔥 전체 처리 (노이즈+샤프닝+블러)</button>
+                <button id="mainNoiseBtn">노이즈 제거</button>
+                <button id="mainSharpenBtn">샤프닝</button>
+                <button id="mainBlurBtn">블러</button>
+                <button id="mainResetBtn">모두 삭제</button>
+            </div>
+
+            <div class="test-input">
+                <label>입력 테스트:</label>
+                <input type="text" placeholder="처리 중에 타이핑 해보세요...">
+            </div>
+
+            <div class="status" id="mainStatus">대기 중...</div>
+        </div>
+
+        <!-- 워커 스레드 -->
+        <div class="section worker-thread">
+            <h2>🟢 워커 스레드</h2>
+
+            <div class="upload-area" id="workerUpload">
+                <input type="file" id="workerFileInput" accept="image/*" multiple style="display: none;">
+                <p>이미지 업로드 (여러 개 선택 가능)</p>
+            </div>
+
+            <div class="progress-info" id="workerProgress">이미지 0개</div>
+            <div class="image-list" id="workerImageList"></div>
+
+            <div class="controls">
+                <button id="workerAllFiltersBtn" style="background-color: #4ecdc4; font-weight: bold;">🔥 전체 처리 (노이즈+샤프닝+블러)</button>
+                <button id="workerNoiseBtn">노이즈 제거</button>
+                <button id="workerSharpenBtn">샤프닝</button>
+                <button id="workerBlurBtn">블러</button>
+                <button id="workerResetBtn">모두 삭제</button>
+            </div>
+
+            <div class="test-input">
+                <label>입력 테스트:</label>
+                <input type="text" placeholder="처리 중에 타이핑 해보세요...">
+            </div>
+
+            <div class="status" id="workerStatus">대기 중...</div>
+        </div>
+    </div>
+
+    <script src="main-thread.js"></script>
+    <script src="worker-thread.js"></script>
+</body>
+</html>
