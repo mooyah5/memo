@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button id="fetch">fetch</button>
+    <p id="present"></p>
+    <select name="" id="">
+      <option value="3000" selected>3s</option>
+      <option value="5000">5s</option>
+      <option value="10000">10s</option>
+      <option value="20000">20s</option>
+      <option value="600000">1m</option>
+    </select>
+    <script>
+      const cache = new Map();
+      async function fetchWithTTL(url, ttl) {
+        const now = Date.now();
+        const cached = cache.get(url);
+        if (cached && now - cached.timestamp < ttl) {
+          return cached.data;
+        }
+        const res = await fetch(url, { method: "GET", cache: "no-store" });
+        const data = await res.json();
+        cache.set(url, { data, timestamp: now });
+        return data;
+      }
+      const url = "https://jsonplaceholder.typicode.com/todos/1";
+      const fetchBtn = document.getElementById("fetch");
+      const present = document.getElementById("present");
+      fetchBtn.addEventListener("click", async () => {
+        const select = document.querySelector("select");
+        const ttl = parseInt(select.value, 10);
+        const data = await fetchWithTTL(url, ttl);
+        present.textContent = JSON.stringify(data);
+      });
+    </script>
+  </body>
+</html>
