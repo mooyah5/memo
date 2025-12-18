@@ -29,7 +29,7 @@ function parseArgs() {
         poster: true,
         crf: 18,
         preset: "slow",
-        scaler: "neighbor", // 'neighbor' | 'lanczos'
+        scaler: "lanczos", // 'neighbor' | 'lanczos'
         tune: "animation",
         posterExt: "jpg", // 'jpg' | 'png'
         public: "", // HTML에서 참조할 prefix 경로 (예: /static/events/2025/winter)
@@ -105,10 +105,10 @@ function convertOne(file, opts) {
 
     // <source> 포함한 video 스니펫
     const htmlSnippet = `
-<video autoplay muted playsinline loop poster="${posterPath}" width="${opts.width}">
-  <source src="${mp4Path}" type="video/mp4">
-  </video>
-  `;
+        <video autoplay muted playsinline loop poster="${posterPath}" width="${opts.width}">
+            <source src="${mp4Path}" type="video/mp4">
+        </video>
+    `;
     //   <!-- 폴백 (source 태그 뒤): 브라우저가 <source>를 지원하지 않을 때 텍스트로 파일 경로 표시 -->
     //   ${mp4Path}
     fs.appendFileSync(path.join(opts.out, "video-snippets.html"), htmlSnippet);

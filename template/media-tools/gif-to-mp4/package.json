@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "convert_gif": "node gif-to-mp4.js --in ./assets/gifs-in --out ./assets/out"
+        "convert_gif": "node gif-to-mp4.js --in ./assets/gifs_in --out ./assets/out"
     },
     "keywords": [],
     "author": "",
