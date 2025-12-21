@@ -90,3 +90,49 @@ Object.prototype.entries // 없음
 
 -   장점: \_proto를 직접 만들어 주면 내장(빌트인) 메서드/프로퍼티가 없어, 무게를 낮추고 성능을 높임
 -   단점: 기본 기능에 제약
+
+### 다중 프로토타입 체인
+
+`js는 타입 설계가 느슨하여, 프로토타입을 변경할 수 있다.`
+
+    - prototype == 객체
+    - prototype에 다튼 타입 객체도 넣을 수 있음
+    - 따라서 프로토타입 체인 증가
+    ```
+    var Grad = function () {
+        var args = Array.prototype.slice.call(arguments)
+        for (var i = 0; i < args.length; i++) {
+            this[i] = args[i]
+        }
+        this.length = args.length
+    }
+    var g = new Grade(100, 80)  // { 0: 100, 1: 80, length: 2}
+    ```
+    현재 Grade를 상속받은 g는 유사배열객체로, g.push(90) 등 배열 메서드를 사용할 수 없는 상태다.
+
+    ```
+    Grade.prototype = [];
+    ```
+    위와같이 Grade 인스턴스의 프로토타입을 '배열 인스턴스'로 변경하면, g.push(90) 등 배열 메서드를 사용할 수 있게 된다.
+    체인: `g -> [] -> Array.prototype -> Object.prototype -> null`
+
+### 정리
+
+어떤 생성자 함수를 new 연산자랑 같이 호출하면,
+Constructore에서 정의된 내용을 바탕으로 new Instance가 생성된다.
+이 Instance에는 `__proto__`라는 Constructor의 prototype 프로퍼티를 참조하는 프로퍼티가 자동 부여된다.
+
+**proto**는 생략 가능한 속성으로, 인스턴스는 Constructor.prototype의 메서드를 마치 자기 메서드처럼 호출할 수 있게 된다.
+
+Constructor.prototype에는 constructor라는 프로퍼티가 있는데, 자기 자신(생성자 함수)를 가리킨다.
+이 프로ㅓ퍼티는 인스턴스가 자기 생성자 함수가 뭔지 알고자 할 때 필요하다.
+
+직각삼각형 대각선방향을 계속 찾아가면(**proto**), 최종은 Object.prototype에 도달한다.
+이런 식으로 **proto**안의 **proto**를 연속적으로 찾아가는 과정을 `프로토타입 체이닝`이라고 부른다.
+이를 통해 각 프로토타입 메서드를 자기 것인냥 호출할 수 있다.
+자기자신으로부터 가장 가까운곳부터 먼대상으로 점차 나아가며, 값을 찾으면 검색을 중단한다.
+
+Object.prototype에는 모든 데이터타입에서 사용 가능한 범용적 메서드만 존재하며
+객체전용 메서드는 여느 데이터 타입과 달리, Object 새엇ㅇ자 함수에 `스태틱하게` 담겨 있다.
+
+프로토타입 체인은 무한대의 단계를 생성할 수 있는데, 어차피 같은 값을 참조하는 거라 무한대로 저장돼있는 건 아님.
