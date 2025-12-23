@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Lazy Load</title>
+        <script src="index.js"></script>
+        <style>
+            .bin {
+                height: 300vh;
+            }
+            .a {
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div class="bin"></div>
+            <p>
+                <!-- 데이터 속성 + IntersectionObserver 자동 주입 -->
+                <img class="image a" data-src="./images/a.jpg" alt="a" width="640" height="422" />
+                <img class="image b" data-src="./images/b.jpg" alt="b" width="640" height="423" />
+                <img class="image c" data-src="./images/c.jpg" alt="c" width="640" height="422" />
+
+                <!-- 네이티브 -->
+                <!-- <img src="./images/a.jpg" alt="a" width="640" height="422" loading="lazy" />
+                <img src="./images/b.jpg" alt="b" width="640" height="423" loading="lazy" />
+                <img src="./images/c.jpg" alt="c" width="640" height="422" loading="lazy" /> -->
+            </p>
+            <button class="btn">그림 로딩하기</button>
+        </main>
+    </body>
+</html>
