@@ -1,0 +1,16 @@
+{
+  "name": "tsconfig_guide",
+  "version": "1.0.0",
+  "description": "-   초기화를 위해 global install을 먼저 한다.\r -   개발 단계에서만 사용하고, 컴파일 시에는 js로 변환되므로 devDependencies에 install하면 된다.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
