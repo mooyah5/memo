@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <style>
+            #a {
+                margin: 50px;
+                background-color: rgb(136, 176, 211);
+            }
+            #b {
+                margin: 20px;
+                background-color: rgb(89, 136, 136);
+                /* border: 1px solid red; */
+            }
+            #c {
+                margin: 40px;
+                background-color: rgb(182, 182, 115);
+            }
+
+            .parent {
+                background-color: #eee;
+            }
+            .child {
+                width: 100px;
+                height: 100px;
+                background-color: orange;
+                margin: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>마진 상쇄</h1>
+        <div id="a">a</div>
+        <div id="b">
+            <div id="c">c</div>
+            b
+        </div>
+        a와 b 사이 마진이 a의 마진인 50px로 상쇄됐네.<br />
+        b내부 마진도 없고 c 마진인 40px로만 이루어졌네. 그나마 'b'라고 적힌 곳은 있네.<br />
+
+        <hr />
+
+        <div class="parent">
+            <div class="child">100px (margin 30px)</div>
+            <div class="child">100px (margin 30px)</div>
+        </div>
+        상단에 있어야 할 30px 마진이 없네... 자식 사이 마진도 30+30이 아닌 그냥 30이네
+    </body>
+</html>
