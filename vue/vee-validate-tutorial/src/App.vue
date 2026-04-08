@@ -1,37 +1,20 @@
 <template>
-  <Form :initial-values="INITIAL_VALUES" :validation-schema="schema" @submit="onSubmit">
-    <label for="email">email</label>
-    <Field id="email" name="email" type="email" />
-    <ErrorMessage name="email" />
+  <div class="page">
+    <InquiryForm />
     <br />
-    <label for="name">name </label>
-    <Field id="name" name="name" />
-    <ErrorMessage name="name" />
-
-    <br />
-    <button>Submit</button>
-  </Form>
+    <FormGenerator />
+  </div>
 </template>
 
 <script setup>
-import { Form, Field, ErrorMessage } from "vee-validate"
-
-import { toTypedSchema } from "@vee-validate/zod"
-import { z } from "zod"
-
-const INITIAL_VALUES = {
-  email: "",
-  name: ""
-}
-
-const schema = toTypedSchema(
-  z.object({
-    email: z.string().trim().min(1, "이메일을 입력해주세요").email("올바른 이메일 형식이 아닙니다"),
-    name: z.string().trim().min(1, "이름을 입력해주세요")
-  })
-)
-
-const onSubmit = (values) => {
-  alert(JSON.stringify(values, null, 2))
-}
+import InquiryForm from "@/components/InquiryForm.vue"
+import FormGenerator from "./components/dynamic/FormGenerator.vue"
 </script>
+
+<style scoped>
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 80px;
+}
+</style>
