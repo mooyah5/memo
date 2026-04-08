@@ -1,0 +1,13 @@
+{
+  "name": "svg-to-sass-raw",
+  "private": true,
+  "type": "module",
+  
+"scripts": {
+    "svg:build": "node scripts/svg2sass-raw.mjs --input svgs --output styles/_svg-data.scss --prefix=sassvg-ico_ --quote single --fill-mode none --stroke-mode keep --style-mode force --debug"
+  },
+
+  "devDependencies": {
+    "svgo": "^3.3.2"
+  }
+}
