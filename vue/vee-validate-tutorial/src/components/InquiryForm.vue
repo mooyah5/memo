@@ -208,7 +208,7 @@ const { values, errors, isSubmitting, purchaseFields, addPurchase, deletePurchas
   </form>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 h1 {
   margin-bottom: 24px;
   font-size: 28px;
@@ -313,18 +313,18 @@ textarea {
   padding: 2px 8px;
   border-radius: 999px;
   background: #eee;
-}
 
-.file-status.uploading {
-  background: #fff4cc;
-}
+  &.uploading {
+    background: #fff4cc;
+  }
 
-.file-status.done {
-  background: #d7f5dd;
-}
+  &.done {
+    background: #d7f5dd;
+  }
 
-.file-status.error {
-  background: #ffd9d9;
+  &.error {
+    background: #ffd9d9;
+  }
 }
 
 .actions {
@@ -339,33 +339,35 @@ textarea {
   border-radius: 8px;
   padding: 10px 14px;
   cursor: pointer;
+
+  &.primary {
+    background: #111827;
+    color: white;
+  }
+
+  &.secondary {
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  &.danger {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
 }
 
-.btn.primary {
-  background: #111827;
-  color: white;
-}
-
-.btn.secondary {
-  background: #e5e7eb;
-  color: #111827;
-}
-
-.btn.danger {
-  background: #fee2e2;
-  color: #991b1b;
-}
-
-.btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.debug pre {
-  background: #111827;
-  color: #e5e7eb;
-  padding: 16px;
-  border-radius: 8px;
-  overflow: auto;
+.debug {
+  pre {
+    background: #111827;
+    color: #e5e7eb;
+    padding: 16px;
+    border-radius: 8px;
+    overflow: auto;
+  }
 }
 </style>
