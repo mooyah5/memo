@@ -5,7 +5,9 @@
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "convert_gif": "node gif-to-mp4.js --in ./assets/gifs_in --out ./assets/out"
+        "convert_gif": "node convert-media.js --in ./assets/gifs_in --out ./assets/out",
+        "optimize_mp4": "node convert-media.js --mode mp4-optimize --in ./assets/mp4_in --out ./assets/out",
+        "convert_webm": "node convert-media.js --mode mp4-to-webm --in ./assets/mp4_in --out ./assets/out"
     },
     "keywords": [],
     "author": "",
