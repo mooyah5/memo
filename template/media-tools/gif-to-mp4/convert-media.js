@@ -38,7 +38,7 @@ function parseArgs() {
         // MP4 최적화/WebM용 옵션
         mp4Crf: 28,
         webmCrf: 32,
-        audio: false
+        audio: true
     };
 
     for (let i = 0; i < args.length; i += 2) {
@@ -199,6 +199,7 @@ function optimizeMp4(file, opts, index) {
                 `-pix_fmt yuv420p ` +
                 `-profile:v main ` +
                 `-level 4.0 ` +
+                `-vsync 0 ` +
                 `${audioOption} ` +
                 `"${outMp4}"`
         );
